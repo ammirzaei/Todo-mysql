@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./Includes/head.ejs') %> 
+    <title><%= pageTitle %> </title>
+</head>
+<body class="rtl">
+    <div class="form-group">
+        <h1 class="page-title"><%= pageTitle %></h1>
+        <form action="/Admin/add-todo" class="row w-50 justify-content-center mx-auto" method="post">
+            <div class="input-group">
+                <input type="text" name="todo" class="form-control w-50" placeholder="کار امروز" >
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary fa fa-plus"></button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="mx-auto w-50 mb-3 alert alert-primary row">
+            <p class="d-inline col">کارهای انجام شده : <span class="badge badge-success badge-pill"><%= countCompleted %></span></p>
+            <p class="d-inline col">کارهای باقی مانده : <span class="badge badge-warning badge-pill"><%= countRemaining %> </span></p>
+        </div>
+        <% if(todos.length > 0){ %>
+            <ul class="list-unstyled" id="todo">
+                <% for(let todo of todos){ %>
+                    <li>
+                        <div class="alert <%= todo.isCompleted ? 'alert-success' : 'alert-secondary' %> ">
+                            <% if(todo.isCompleted) { %>
+                                <del><%= todo.text %></del>
+                                <a href="/Admin/delete-todo/<%= todo.id %> " class="close fa fa-trash text-danger"></a> 
+                            <% } else { %>
+                                <%= todo.text %>
+                                <a href="/Admin/delete-todo/<%= todo.id %> " class="close fa fa-trash text-danger"></a> 
+                                <a href="/Admin/completed-todo/<%= todo.id %> " class="close fa fa-check-square text-success mr-2"></a> 
+                            <% } %>     
+                        </div>
+                    </li>
+                <% } %> 
+            </ul>
+        <% } else { %>
+            <div class="alert alert-warning w-50 mx-auto">
+                <h4 class="alert-heading">کاری برای امروز نداری</h4>
+                <p>میتونی از بالا کارهای امروزت را ثبت کنی <span class="fa fa-heart text-danger"></span></p>
+            </div>
+        <% } %> 
+    </div>
+</body>
+</html>
