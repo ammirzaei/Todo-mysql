@@ -1,35 +1,34 @@
 const Todo = require("../Models/todo");
-const { generateId } = require("../Utils/todos");
 
-module.exports.addTodo = (req, res) => {
+module.exports.addTodo = async (req, res) => {
   if (!req.body.todo) return res.redirect("/");
-  const todo = new Todo(generateId(), req.body.todo);
-  todo.AddTodo((err) => {
-    if (!err) return res.redirect("/");
-    else {
-      console.log(`Error : ${err}`);
-      res.redirect("/");
-    }
-  });
+  try {
+    await Todo.create({ title: req.body.todo });
+    res.redirect('/');
+  } catch (err) {
+    console.log(err);
+  }
 };
-module.exports.deleteTodo = (req, res) => {
-  Todo.DeleteTodo(req.params.id, (err) => {
-    if (!err) return res.redirect("/");
-    else {
-      console.log(`Error : ${err}`);
-      if (err === "Not Found Todo!") return res.redirect("/NotFound");
-      else return res.redirect("/");
-    }
-  });
+module.exports.deleteTodo = async (req, res) => {
+  try {
+    await Todo.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+    res.redirect('/');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-module.exports.changeCompleted = (req, res) => {
-  Todo.ChangeToCompleted(req.params.id, (err) => {
-    if (!err) return res.redirect("/");
-    else {
-      console.log(`Error : ${err}`);
-      if (err === "Not Found Todo!") return res.redirect("/NotFound");
-      else return res.redirect("/");
-    }
-  });
+module.exports.changeCompleted = async (req, res) => {
+  try {
+    const todo = await Todo.findByPk(req.params.id);
+    todo.isCompleted = true;
+    await todo.save();
+    res.redirect('/');
+  } catch (err) {
+    console.log(err);
+  }
 };
