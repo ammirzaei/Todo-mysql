@@ -1,12 +1,15 @@
 const Todo = require("../Models/todo");
 
-module.exports.ReadTodo = (req, res) => {
-  Todo.GetAllTodo((todos, countCompleted, countRemaining) => {
-    res.render("index", {
+module.exports.ReadTodo = async (req, res) => {
+  try {
+    const todos = await Todo.findAll();
+    res.render('index', {
       pageTitle: "کارهای روزمره",
       todos,
-      countCompleted,
-      countRemaining
+      countCompleted: todos.filter(t => t.isCompleted).length,
+      countRemaining: todos.filter(t => !t.isCompleted).length
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };

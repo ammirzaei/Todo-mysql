@@ -29,13 +29,12 @@
                     <li>
                         <div class="alert <%= todo.isCompleted ? 'alert-success' : 'alert-secondary' %> ">
                             <% if(todo.isCompleted) { %>
-                                <del><%= todo.text %></del>
-                                <a href="/Admin/delete-todo/<%= todo.id %> " class="close fa fa-trash text-danger"></a> 
+                                <del><%= todo.title %></del>
                             <% } else { %>
-                                <%= todo.text %>
-                                <a href="/Admin/delete-todo/<%= todo.id %> " class="close fa fa-trash text-danger"></a> 
-                                <a href="/Admin/completed-todo/<%= todo.id %> " class="close fa fa-check-square text-success mr-2"></a> 
+                                    <%= todo.title %>
+                                    <a href="/Admin/completed-todo/<%= todo.id %> " class="close fa fa-check-square text-success mr-2"></a> 
                             <% } %>     
+                             <a href="/Admin/delete-todo/<%= todo.id %> " class="close fa fa-trash text-danger"></a> 
                         </div>
                     </li>
                 <% } %> 
